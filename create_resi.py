@@ -1,7 +1,8 @@
 import random
 import string
 from datetime import datetime
-from firebase_config import init_firebase
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 # Generate nomor resi
 def generate_resi_code():

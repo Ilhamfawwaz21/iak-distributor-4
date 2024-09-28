@@ -1,5 +1,5 @@
 import pandas as pd
-from graph_routes import find_cheapest_route, find_fastest_route
+from graph_routes import create_graph, find_cheapest_route, find_fastest_route
 
 def process_purchases(df_graph, df_purchases):
     G = create_graph(df_graph)
