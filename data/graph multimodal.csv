@@ -1,0 +1,16 @@
+source,destination,mode,weight
+jakarta,bandung,darat,153
+jakarta,semarang,darat,438
+jakarta,jogjakarta,darat,532
+jakarta,surabaya,darat,781
+jakarta,denpasar,darat,1183
+bandung,surabaya,darat,703
+bandung,jogjakarta,darat,493
+bandung,semarang,darat,360
+bandung,denpasar,darat,1104
+semarang,surabaya,darat,352
+semarang,jogjakarta,darat,147
+semarang,denpasar,darat,752
+jogjakarta,surabaya,darat,323
+jogjakarta,denpasar,darat,752
+surabaya,denpasar,darat,424
