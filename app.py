@@ -1,25 +1,21 @@
+import flask
 from flask import Flask, render_template, request
 import pandas as pd
 from purchases import process_purchases
-from resi_checker import check_resi_code, generate_resi_code
+from login import load_users_from_excel, login
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 app = Flask(__name__)
 
-# Data dari tabel disimpan sebagai list of dictionaries
-def load_users_from_excel(file_path):
-    df = pd.read_excel(file_path)
-    users = df.to_dict(orient='records')
-    return users
-
-file_path = 'D:/Kuliah/IAK UTS/UTS/iak-distributor-4/data/admin.xlsx'
+file_path = '.../iak-distributor-4/data/admin.xlsx'
 users = load_users_from_excel(file_path)
 
-# Function login 
-def login(username_input, password_input):
-    for user in users:
-        if user['username'] == username_input and user['password'] == password_input:
-            return f"Login berhasil! Selamat datang, {user['position']}."
-    return "Login gagal! Username atau password salah."
+##Database start##
+cred = credentials.Certificate(".../iak-distributor-4/data/iak-distributor-4-78b8c3de8089.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+##Database End##
 
 @app.route('/')
 def index():
@@ -38,23 +34,47 @@ def login_route():
 # Route untuk memproses pembelian dan menghitung rute
 @app.route('/process_purchases', methods=['POST'])
 def process_purchases_route():
-    df_graph = pd.read_csv('data graph.csv')
-    df_purchases = pd.read_excel('cobacobaaja.xlsx')
+    # Baca file 'data graph.csv' sebagai grafik yang sudah ada
+    df_graph = pd.read_csv('.../iak-distributor-4/data/data_graph.csv')
 
-    results = process_purchases(df_graph, df_purchases)
+    # Periksa apakah request JSON ada
+    if request.is_json:
+        try:
+            # Ambil data JSON dari request
+            purchase_data = request.get_json()
 
-    return render_template('results.html', results=results)
+            # Konversi data JSON ke DataFrame pandas
+            df_purchases = pd.DataFrame(purchase_data)
 
-# Route untuk mengecek kode resi
-@app.route('/check_resi', methods=['GET', 'POST'])
-def check_resi_route():
-    if request.method == 'POST':
-        resi_code = request.form['resi_code']
-        valid_resis = ['100923145601ABCD', '210923101233WXYZ']  # Daftar kode resi valid
-        message = check_resi_code(resi_code, valid_resis)
-        return render_template('check_resi.html', message=message)
+            # Proses pembelian dengan algoritma
+            results = process_purchases(df_graph, df_purchases)
 
-    return render_template('check_resi.html')
+            # Simpan hasil ke Firebase
+            for result in results:
+                db.collection('request_harga').add(result)
+
+            # Kembalikan hasil
+            return jsonify(results), 200
+
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+    else:
+        return jsonify({'status': 'error', 'message': 'Invalid JSON format'}), 400
+
+@app.route('/update_resi', methods=['POST'])
+def update_resi():
+    # Ambil data dari request
+    data = request.get_json()
+    id_log = data.get('id_log')
+
+    if not id_log:
+        return jsonify({'message': 'id_log tidak ditemukan dalam request'}), 400
+
+    # Panggil fungsi untuk update resi
+    result = add_resi(id_log)
+
+    # Kembalikan hasil sebagai response JSON
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=True)

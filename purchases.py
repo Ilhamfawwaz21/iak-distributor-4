@@ -4,9 +4,10 @@ from graph_routes import find_cheapest_route, find_fastest_route
 def process_purchases(df_graph, df_purchases):
     G = create_graph(df_graph)
     
-    results = pd.DataFrame(columns=['id_pembelian', 'total_biaya', 'total_waktu'])
+    results = pd.DataFrame(columns=['id_log','id_pembelian', 'total_biaya', 'total_waktu'])
 
     for index, row in df_purchases.iterrows():
+        id_log = row['id_log']
         id_pembelian = row['id_pembelian']
         kota_asal = row['kota_asal'].lower()
         kota_tujuan = row['kota_tujuan'].lower()
@@ -20,6 +21,7 @@ def process_purchases(df_graph, df_purchases):
 
         # Menambahkan hasil ke DataFrame
         results.loc[len(results)] = {
+            'id_log': id_log,
             'id_pembelian': id_pembelian,
             'total_biaya': f"Rp{total_cost:,.0f}" if total_cost < float('infinity') else 'Tidak Ditemukan',
             'total_waktu': f"{total_time:.2f} jam" if total_time < float('infinity') else 'Tidak Ditemukan'
