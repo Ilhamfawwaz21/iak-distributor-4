@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pengiriman</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.75s ease-out forwards;
+            animation-delay: 0.75s;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.75s ease-out forwards;
+        }
+    </style>
+
+</head>
+<body class="bg-gradient-to-r from-red-200 via-white-100 to-pink-300 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-truck text-2xl mr-2"></i>
+            <a class="font-bold text-xl hover:underline" href="landing_page">NYON EXPRESS</a>
+        </div>
+        <nav class="space-x-4">
+            <a class="hover:underline" href="check_resi">Cek Resi</a>
+            <a class="hover:underline" href="loginbro">Log In</a>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex justify-center items-center flex-grow fade-in relative">
+        <div class="w-full max-w-4xl mx-4 p-4 bg-white rounded-lg shadow-md relative">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Status Pengiriman</h2>
+            
+            <img class="absolute top-0 left-0 w-64 h-auto z-20 transform -translate-x-20 -translate-y-20" src="https://s3-alpha-sig.figma.com/img/00b8/3ba8/321058c75752811bcdc7a771cf62bd28?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mzt0c0YfB-7DyufSG1Wt8nLppmF~E6BL~D16aZnM-vgJJ4-yc1Bxdi~bIUm6TLhigGxmbxk-A3dfCQXBBx3r2JZjLplrYfxHaTEvlTlK3BvX3uRKmYqfZv9O8azp6qmzbWDPucOfuubwA~wCcj4E4KT0VZOVacA5rUExueACPmINWHKQMXUGZ6JB04D~vqqWF8DQe6-ySsQfygQmQ6m1DtVKCH0m9zAKWANZmll7YW-I2We1DN2NEYacy~S6C7nIgyjFDdE4n9I00ZG~e3TIu1DYlikNHHl6NXakzXGOAwcQPI8SMHwVAfayZ9vgOPbkBS-pY7APVxM2lBBl-lLmNQ__" alt="Logo">
+
+            {% if data_to_display and data_to_display|length > 0 %}
+                <table class="min-w-full table-auto">
+                    <thead class="bg-red-600 text-white">
+                        <tr>
+                            <th class="px-4 py-2">Tracking Number</th>
+                            <th class="px-4 py-2">Status</th>
+                            <th class="px-4 py-2">Kota Asal</th>
+                            <th class="px-4 py-2">Kota Tujuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-gray-100">
+                            <td class="border px-4 py-2">{{ data_to_display[0].resi }}</td>
+                            <td class="border px-4 py-2">{{ data_to_display[0].status }}</td>
+                            <td class="border px-4 py-2">{{ data_to_display[0].kota_asal }}</td>
+                            <td class="border px-4 py-2">{{ data_to_display[0].kota_tujuan }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-center text-red-600">Tidak ada data yang tersedia untuk ditampilkan.</p>
+            {% endif %}
+        </div>
+    </main>
+
+</body>
+</html>

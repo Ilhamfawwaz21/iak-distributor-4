@@ -1,39 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cek Resi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.75s ease-out forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.75s ease-out forwards;
+        }
+    </style>
+
 </head>
-<body>
-    <header>
-        <h1>Cek Status Pengiriman Anda</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Cek Resi</a></li>
-                <li><a href="#">Layanan Kami</a></li>
-                <li><a href="#">Kontak</a></li>
-            </ul>
+
+<body class="bg-gradient-to-r from-red-200 via-white-100 to-pink-300">
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-truck text-2xl mr-2"></i>
+            <a class="font-bold text-xl hover:underline" href="landing_page">NYON EXPRESS</a>
+        </div>
+        <nav class="space-x-4">
+            <a class="hover:underline" href="check_resi">Cek Resi</a>
+            <a class="hover:underline" href="loginbro">Log In</a>
         </nav>
     </header>
 
-    <section class="check-resi">
-        <h2>Masukkan Kode Resi Anda</h2>
-        <form method="POST" action="{{ url_for('check_resi_route') }}">
-            <label for="resi_code">Kode Resi:</label>
-            <input type="text" id="resi_code" name="resi_code" required>
-            <button type="submit">Cek Resi</button>
-        </form>
+    <main class="flex flex-col items-center mt-5">
+        <h1 class="text-red-600 text-2xl font-bold mb-6">Cek Resi Kamu Di Sini!</h1>
 
-        {% if message %}
-            <p class="message">{{ message }}</p>
-        {% endif %}
-    </section>
+        <!-- Display message if present -->
+        <div class="mb-4">
+            {% if message %}
+                {% if message == 'resi_not_found' %}
+                    <p class="text-red-600 font-semibold">Resi tidak ditemukan.</p>
+                {% else %}
+                    <p class="text-green-600 font-semibold">{{ message }}</p>
+                {% endif %}
+            {% endif %}
+        </div>
 
-    <footer>
-        <p>&copy; 2024 Layanan Pengiriman Kami. Semua Hak Dilindungi.</p>
-    </footer>
+        <!-- Container with Image and Input for Tracking Number -->
+        <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center space-y-6 fade-in">
+            <img class="w-80 h-auto" src="https://s3-alpha-sig.figma.com/img/f76f/fb4e/4168e1386fddcf8332b48260e94add9c?Expires=1728259200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Co~Q4GRrp6U9WolR-Mez8w2yi4UIxw~nujM0yT6~Bab0KWthnfAReu6z9y4T9JHnrkhbpiZTZSzO1vRqj0gQLmzoUC57Sl66HbaluyaWDwUg9PloVpYs12FYitKQEFr9kQYI3myN-roaYYGGX3GF7RKnpuYrSActdTRxVEDRfylqrfM91~vDJ69jlzl4kkyBesDON3XQh-ggLqABbPv7t0ORdxpKpJz7PBQ6arNPKkao9VwKrFHxA0es7X8CU9OWQmKpPSSPrO9hIM8BZD8ImKz3sjY6uxd7ZaErev4ychzOrLmfCNOxGcw9eXwIP4qRYNAzVunSb5JfCDzj82fKYQ__" alt="Service Image" />
+
+            <p class="text-lg font-semibold text-gray-700">Masukkan Nomor Resi Anda</p>
+            <form method="POST" action="{{ url_for('check_resi') }}" class="flex flex-col items-center space-y-4">
+                <input type="text" id="resi_code" name="resi_code" placeholder="Nomor Resi" class="p-2 border border-gray-300 rounded-lg w-72 focus:ring-2 focus:ring-red-500 focus:outline-none" required>
+
+                <!-- Button to Check Status -->
+                <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-all">
+                    Cek Status Pengiriman
+                </button>
+            </form>
+        </div>
+    </main>
+
 </body>
+
 </html>

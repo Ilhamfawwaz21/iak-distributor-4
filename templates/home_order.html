@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Orders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        // Toggle visibility of the dropdown menu
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownButtons = document.querySelectorAll('.menu-button');
+
+            dropdownButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const dropdownMenu = this.nextElementSibling;
+                    dropdownMenu.classList.toggle('hidden');
+                });
+            });
+
+            // Show message if present
+            const messageElement = document.getElementById('message');
+            if (messageElement) {
+                // Display message
+                messageElement.classList.remove('hidden');
+                // Hide message after 4 seconds
+                setTimeout(() => {
+                    messageElement.classList.add('fade-out');
+                }, 4000);
+            }
+        });
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes rightIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.75s ease-out forwards;
+        }
+
+        .right-in {
+            animation: rightIn 0.75s ease-out forwards;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.75s ease-out forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.75s ease-out forwards;
+            animation-delay: 0.5s; /* Delay before starting fade out */
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-r from-red-200 via-white-100 to-pink-300">
+    
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-truck text-2xl mr-2"></i>
+            <a class="font-bold text-xl hover:underline" href="landing_page">NYON EXPRESS</a>
+        </div>
+        <nav class="space-x-4">
+            <a class="hover:underline" href="check_resi">Cek Resi</a>
+            <a class="hover:underline" href="loginbro">Log Out</a>
+        </nav>
+    </header>
+    
+
+    <section class="mt-8 w-full max-w-6xl items-center mx-auto fade-in">
+        <div id="message" class="rounded-md hidden bg-green-400 text-white p-1 mb-4 text-center">
+            {% if message %}
+                {{ message }}
+            {% endif %}
+        </div>
+        <h2 class="text-center text-2xl font-bold mb-4">Add Orders</h2>
+        
+        <!-- Form untuk menambah order baru -->
+        <form action="/add_orders" method="POST" class="mb-4">
+            <div class="grid grid-cols-6 gap-2">
+                <input type="text" name="id_log" placeholder="ID Log" class="border p-2" required>
+                <input type="text" name="id_pembelian" placeholder="ID Pembelian" class="border p-2" required>
+                <input type="number" name="berat" placeholder="Berat (Kg)" class="border p-2" required>
+                <input type="text" name="kota_asal" placeholder="Kota Asal" class="border p-2" required>
+                <input type="text" name="kota_tujuan" placeholder="Kota Tujuan" class="border p-2" required>
+                <button type="submit" class="bg-blue-500 text-white p-2 hover:bg-blue-700">Tambah Order</button>
+            </div>
+        </form>
+
+        
+
+        <hr class="my-8 border-gray-500">
+        
+        <!-- Tabel untuk menampilkan data order -->
+        <h2 class="text-center text-2xl font-bold mb-4 fade-in">Shipment Orders</h2>
+        <table class="min-w-full bg-white border-2 border-gray-500 mx-auto table-auto fade-in">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="py-1 px-2 border-2 border-gray-500">ID Log</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">ID Pembelian</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Berat (Kg)</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Status</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Kota Asal</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Kota Tujuan</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Resi</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                {% for result in results %}
+                <tr>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ result['id_log'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ result['id_pembelian'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ result['berat'] }}</td>
+
+                    <!-- Dropdown kolom status -->
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">
+                        <select name="status" form="update-form-{{ result['resi'] }}" class="border p-2 rounded">
+                            <option value="On Progress" {% if result['status'] == 'On Progress' %}selected{% endif %}>On Progress</option>
+                            <option value="On Shipping" {% if result['status'] == 'On Shipping' %}selected{% endif %}>On Shipping</option>
+                            <option value="Finished" {% if result['status'] == 'Finished' %}selected{% endif %}>Finished</option>
+                        </select>
+                    </td>
+
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ result['kota_asal'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ result['kota_tujuan'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ result['resi'] }}</td>
+
+                    <!-- Kolom Action -->
+                    <td class="py-1 px-2 border-2 border-gray-500 text-right">
+                        <div class="flex justify-center items-center space-x-2">
+                            <form id="update-form-{{ result['resi'] }}" action="{{ result['update_url'] }}" method="POST">
+                                <input type="hidden" name="id_log" value="{{ result['id_log'] }}">
+                                <input type="hidden" name="id_pembelian" value="{{ result['id_pembelian'] }}">
+                                <input type="hidden" name="berat" value="{{ result['berat'] }}">
+                                <input type="hidden" name="kota_asal" value="{{ result['kota_asal'] }}">
+                                <input type="hidden" name="kota_tujuan" value="{{ result['kota_tujuan'] }}">
+
+                                <!-- Tombol Update -->
+                                <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700">Update</button>
+                            </form>
+
+                            <!-- Tombol Delete -->
+                            <form action="{{ result['delete_url'] }}" method="POST">
+                                <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <!-- Tampilkan pesan jika tidak ada data -->
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-red-500">
+                        No orders available
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <hr class="my-8 border-gray-500">
+
+        <!-- Tabel untuk menampilkan data history pengiriman -->
+        <h2 class="text-center text-2xl font-bold mt-8 mb-4">Order History</h2>
+        <table class="min-w-full bg-white border-2 border-gray-500 mx-auto table-auto mb-4 fade-in">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="py-1 px-2 border-2 border-gray-500">ID Log</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">ID Pembelian</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Berat (Kg)</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Status</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Kota Asal</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Kota Tujuan</th>
+                    <th class="py-1 px-2 border-2 border-gray-500">Resi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if history_results %}
+                {% for history in history_results %}
+                <tr>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['id_log'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['id_pembelian'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['berat'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['status'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['kota_asal'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['kota_tujuan'] }}</td>
+                    <td class="py-1 px-2 border-2 border-gray-500 text-xs">{{ history['resi'] }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <!-- Tampilkan pesan jika tidak ada data history -->
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-red-500">
+                        No history available
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </section>
+</body>
+
+</html>
