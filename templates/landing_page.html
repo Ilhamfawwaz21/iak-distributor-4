@@ -1,50 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>NYON EXPRESS: Your trustworthy shipping partner</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes rightIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.75s ease-out forwards;
+        }
+
+        .right-in {
+            animation: rightIn 0.75s ease-out forwards;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.75s ease-out forwards;
+            animation-delay: 0.75s;
+        }
+    </style>
+    
 </head>
-<body>
-    <header>
-        <h1>Selamat Datang di Layanan Pengiriman Kami</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Cek Resi</a></li>
-                <li><a href="#">Layanan Kami</a></li>
-                <li><a href="#">Kontak</a></li>
-            </ul>
+
+<body class="bg-gradient-to-r from-red-200 via-white-100 to-pink-300">  
+    <!-- Header Section -->
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-truck text-2xl mr-2"></i>
+            <a class="font-bold text-xl hover:underline" href="landing_page">NYON EXPRESS</a>
+        </div>
+        <nav class="space-x-4">
+            <a class="hover:underline" href="check_resi">Cek Resi</a>
+            <a class="hover:underline" href="loginbro">Log In</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Pengiriman Cepat dan Tepat Waktu</h2>
-            <p>Dengan sistem kami, pengiriman Anda akan sampai dengan aman dan cepat. Cek resi untuk melihat status pengiriman.</p>
-            <a href="#" class="cta-btn">Cek Resi Sekarang</a>
-        </div>
-    </section>
+    <!-- Service Features Section -->
+    <main class="flex flex-col items-center mt-10">
+        <div class="bg-white p-10 rounded-lg shadow-lg flex flex-col items-center">
+            <h1 class="text-red-600 text-2xl font-bold mb-6 fade-in">MELAYANI DENGAN SEPENUH HATI</h1>
+            <div class="flex items-center">
+                <!-- Image -->
+                <img class="w-96 h-auto slide-in" src="https://s3-alpha-sig.figma.com/img/7a89/0752/932cc23c482d216c19fba534b7c64ec1?Expires=1728259200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=DwWRfPyalXhEDD7WJTiPiYT2Vink9IiYmXuC5qnk-K~~p2HzpAnXwADjp7EorFdfq1Sn7B92nolEqWJaqOgHLmKVYzSGq~Fn4qR3ZD47onRnF0TCpo7Uq1lwIz9AsQ4P~A5GcC9KNEc1kuv912zCQziTtW3r~UAIlX3PJaaNyp52TCp4CPEAMw9gZ8qkbeQbxsxjbE5NPtRTetsBNbAsC-Ow-ILqo2PuBkgTj5BqZAJfjASAPhrpAoX1yHtMceJlDOkkPoK8g7TkRdkSVVMeo15nF3ERDpNhXIuf-brejsBhMsNiVNeYZ-N8GS4KyKIANs~6A4wa3K-pcZl8p6F5AA__" alt="Service Image" />
+    
+                <!-- Service Information -->
+                <div class="ml-10 space-y-4 right-in">
+                    <!-- Barang Aman -->
+                    <div class="bg-red-600 text-white p-4 rounded-full flex items-center space-x-4 hover:scale-110 transition duration-300">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Barang Aman</span>
+                    </div>
 
-    <section class="features">
-        <h3>Mengapa Memilih Kami?</h3>
-        <div class="feature-item">
-            <h4>Pengiriman Cepat</h4>
-            <p>Kami menawarkan layanan pengiriman yang cepat dengan estimasi waktu yang jelas.</p>
-        </div>
-        <div class="feature-item">
-            <h4>Biaya Transparan</h4>
-            <p>Tidak ada biaya tersembunyi. Anda dapat menghitung biaya pengiriman secara transparan.</p>
-        </div>
-        <div class="feature-item">
-            <h4>Tracking Real-time</h4>
-            <p>Lacak pengiriman Anda dengan kode resi yang kami sediakan secara real-time.</p>
-        </div>
-    </section>
+                    <!-- Pengiriman Cepat -->
+                    <div class="bg-red-600 text-white p-4 rounded-full flex items-center space-x-4 hover:scale-110 transition duration-300">
+                        <i class="fas fa-truck"></i>
+                        <span>Pengiriman Cepat</span>
+                    </div>
 
-    <footer>
-        <p>&copy; 2024 Layanan Pengiriman Kami. Semua Hak Dilindungi.</p>
-    </footer>
+                    <!-- Jangkauan Luas -->
+                    <div class="bg-red-600 text-white p-4 rounded-full flex items-center space-x-4 hover:scale-110 transition duration-300">
+                        <i class="fas fa-globe"></i>
+                        <span>Jangkauan Luas</span>
+                    </div>
+
+                    <!-- Real Time Tracking System -->
+                    <div class="bg-red-600 text-white p-4 rounded-full flex items-center space-x-4 hover:scale-110 transition duration-300">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Real Time Tracking System</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+
+
 </body>
+
 </html>

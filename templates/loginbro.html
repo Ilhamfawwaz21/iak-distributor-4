@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYON EXPRESS - Log In</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide-in {
+            opacity: 0;
+            animation: slideIn 1s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.75s ease-out forwards;
+        }
+    </style>
+      
+</head>
+
+<body class="bg-gradient-to-r from-red-200 via-white-100 to-pink-300">  
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-truck text-2xl mr-2"></i>
+            <a class="font-bold text-xl hover:underline" href="landing_page">NYON EXPRESS</a>
+        </div>
+        <nav class="space-x-4">
+            <a class="hover:underline" href="check_resi">Cek Resi</a>
+            <a class="hover:underline" href="loginbro">Log In</a>
+        </nav>
+    </header>
+
+    <!-- Container-->
+<div class="flex justify-center items-center py-10 overflow-y-hidden fade-in">
+    <div class="bg-white p-8 rounded-lg shadow-lg border-2 border-red-600 relative">
+        <h2 class="text-2xl font-bold text-center mb-6">
+            Log In
+        </h2>
+        
+       
+
+        <!-- Login Form -->
+        <form method="POST" action="/loginbro">
+            <div class="mb-4">
+                <label class="block text-gray-700" for="username">
+                    Username
+                </label>
+                <div class="flex items-center border rounded-lg p-2">
+                    <i class="fas fa-user text-gray-400 mr-2"></i>
+                    <input class="w-full outline-none font-sans text-gray-800" id="username" name="username" placeholder="Username" type="text" required />
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700" for="password">
+                    Password
+                </label>
+                <div class="relative flex items-center border rounded-lg p-2">
+                    <i class="fas fa-key text-gray-400 mr-2"></i>
+                    <input class="w-full outline-none font-sans text-gray-800 pr-12" id="password" name="password" placeholder="Password" type="password" required />
+                    <!-- Show Password Button -->
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-3 text-gray-600 hidden">
+                        Show
+                    </button>
+                </div>
+            </div>
+
+            <button class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700" type="submit">
+                Log In
+            </button>
+        </form>
+        
+        <div class="flex items-center my-4">
+            <hr class="flex-grow border-t border-gray-300"/>
+            <span class="mx-2 text-gray-500">
+                or
+            </span>
+            <hr class="flex-grow border-t border-gray-300"/>
+        </div>
+        <a href="landing_page" class="w-full border border-red-600 text-red-600 py-2 rounded-lg hover:bg-red-100 flex items-center justify-center text-center">
+            Back to Homepage
+        </a>
+
+        <img class="absolute -bottom-12 -right-52 w-96 h-auto slide-in" src="https://s3-alpha-sig.figma.com/img/4c65/0e01/8612062d499f198d74cf5feea88e7dbf?Expires=1728259200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=c912pOfjQKgjx7u8EGehhMGJ5jydfOdQMi7DWZrHGG5H7WlXN88YIczsDMlQfKnNn1GlHiAoc~knYsrN8a-MAkbUkmBnu~dFBlHkxmgt-NIBgOjQ1YoHFiL5ZHY8AsoVJ4o~Ca9oQvaC~1VmIBcW~V84ZypPeUAJDprNrnTKB4ZUABAVz5kJpCyPrpz22NGvBXSfwArfzj2ck2EzOT~WHiWEcEIiv-g8XoAH71s5SLERY8ZNZeX~vhcKdsucdUBqVTCu-UT~VyN82dkdM3VTwVt78~YHkB6CRNorAH2rguyl6O-p8cE94~uwT-lowjimWJN2BocxzoDIMWVQWWqQnw__"/>
+    </div>
+</div>
+
+    <script>
+        const passwordField = document.querySelector('#password');
+        const togglePasswordButton = document.querySelector('#togglePassword');
+    
+        // Listen for input in the password field
+        passwordField.addEventListener('input', function () {
+            if (passwordField.value.length > 0) {
+                // Show the button when there is input
+                togglePasswordButton.classList.remove('hidden');
+            } else {
+                // Hide the button if the input is cleared
+                togglePasswordButton.classList.add('hidden');
+            }
+        });
+    
+        // Toggle password visibility when the button is clicked
+        togglePasswordButton.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle the button text between Show and Hide
+            this.textContent = type === 'password' ? 'Show' : 'Hide';
+        });
+    </script>
+    
+</body>
+
+</html>
